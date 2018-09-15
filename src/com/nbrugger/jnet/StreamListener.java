@@ -6,7 +6,7 @@ package com.nbrugger.jnet;
  * @version 2018-09-15
  */
 public class StreamListener extends Thread {
-	public StreamListener() {
+	public StreamListener(NetConnection netConnection) {
 
 	}
 }
