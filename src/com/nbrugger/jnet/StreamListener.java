@@ -48,7 +48,6 @@ public class StreamListener extends Thread {
 						l.onByteInput(connection, data);
 					}
 				} catch (IOException e) {
-					e.printStackTrace();
 					for (IOListener l : connection.getServer().getIOListeners()) {
 						l.connectionLost(connection);
 					}

@@ -25,6 +25,7 @@ public class NetConnection {
 		} catch (SocketException e) {
 			e.printStackTrace();
 		}
+		listener.start();
 	}
 	/**
 	 * @return the connection
@@ -49,7 +50,7 @@ public class NetConnection {
 	 */
 	public void sendData(byte[] data) throws IOException {
 		DataOutputStream dos = new DataOutputStream(connection.getOutputStream());
-		dos.write(data.length);
+		dos.writeInt(data.length);
 		dos.write(data);
 	}
 	
