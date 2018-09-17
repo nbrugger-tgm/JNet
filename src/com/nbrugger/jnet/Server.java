@@ -29,15 +29,15 @@ public class Server {
 	 * @throws IOException
 	 */
 	public Server(int port, int timeout) throws IOException {
-		this.port = port;
+		this(port);
 		this.timeout = timeout;
-		socket = new ServerSocket(port);
-		listener.start();
 	}
 
 	public Server(int port) throws IOException {
 		this.port = port;
 		socket = new ServerSocket(port);
+		serverlistener.add(new DefaultConnectionListener(this));
+		listener.start();
 	}
 
 	public int getPort() {
@@ -105,5 +105,11 @@ public class Server {
 	 */
 	public void setActive(boolean isActive) {
 		this.isActive = isActive;
+	}
+	
+	public void brodcast(byte[] data) throws IOException {
+		for (NetConnection netConnection : openConnections) {
+			netConnection.sendData(data);
+		}
 	}
 }
