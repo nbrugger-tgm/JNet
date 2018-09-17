@@ -13,11 +13,12 @@ import java.util.ArrayList;
  */
 public class NetConnection {
 	private final Socket connection;
-	private final ArrayList<IOListener> listeners = new ArrayList<>();
 	private final StreamListener listener = new StreamListener(this);
 	private boolean active = true;
+	private Server server;
 	
-	public NetConnection(Socket connection) {
+	public NetConnection(Socket connection,Server s) {
+		this.setServer(s);
 		this.connection = connection;
 		try {
 			this.connection.setKeepAlive(true);
@@ -31,12 +32,7 @@ public class NetConnection {
 	public Socket getConnection() {
 		return connection;
 	}
-	/**
-	 * @return the listeners
-	 */
-	public ArrayList<IOListener> getListeners() {
-		return listeners;
-	}
+	
 	/**
 	 * @return the listener
 	 */
@@ -65,6 +61,18 @@ public class NetConnection {
 	}
 	public boolean isActive() {
 		return active;
+	}
+	/**
+	 * @return the server
+	 */
+	public Server getServer() {
+		return server;
+	}
+	/**
+	 * @param server the server to set
+	 */
+	public void setServer(Server server) {
+		this.server = server;
 	}
 }
 

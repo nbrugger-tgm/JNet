@@ -14,6 +14,7 @@ public class Server {
 	private final ServerSocket socket;
 	private final ArrayList<NetConnection> openConnections = new ArrayList<>();
 	private final ArrayList<ServerListener> serverlistener = new ArrayList<>();
+	private final ArrayList<IOListener> listeners = new ArrayList<>();
 	private final ConnectionListener listener = new ConnectionListener(this);
 	private final int port;
 	private int timeout = 5000;
@@ -69,6 +70,9 @@ public class Server {
 	void addConnection(NetConnection connection) {
 		openConnections.add(connection);
 	}
+	public void addIOListener(IOListener listener) {
+		listeners.add(listener);
+	}
 
 	/**
 	 * @return the socket
@@ -111,5 +115,12 @@ public class Server {
 		for (NetConnection netConnection : openConnections) {
 			netConnection.sendData(data);
 		}
+	}
+
+	/**
+	 * @return the listeners
+	 */
+	public ArrayList<IOListener> getIOListeners() {
+		return listeners;
 	}
 }

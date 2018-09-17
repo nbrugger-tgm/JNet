@@ -23,7 +23,7 @@ public class ConnectionListener extends Thread {
 			while(server.isActive()) {
 				try {
 					Socket s = server.getSocket().accept();
-					NetConnection connection = new NetConnection(s);
+					NetConnection connection = new NetConnection(s, server);
 					for(ServerListener listener : server.getServerlistener()) {
 						listener.onConnectionOpen(connection);
 					}
