@@ -13,8 +13,8 @@ import com.nbrugger.jnet.Server;
  * @version 2018-09-17
  */
 public class TextConnection extends NetConnection {
-	public TextConnection(Socket connection, Server s) {
-		super(connection, s);
+	public TextConnection(Socket connection, Server server) {
+		super(connection, server);
 	}
 	public void sendText(String text) throws IOException {
 		try {

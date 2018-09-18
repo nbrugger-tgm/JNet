@@ -3,7 +3,9 @@ package com.nbrugger.jnet.text;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import com.nbrugger.jnet.ConnectionListener;
 import com.nbrugger.jnet.IOListener;
+import com.nbrugger.jnet.NetConnection;
 import com.nbrugger.jnet.Server;
 
 /**
@@ -22,14 +24,7 @@ public class TextServer extends Server {
 	 */
 	public TextServer(int port) throws IOException {
 		super(port);
-	}
-	
-	/**
-	 * @see com.nbrugger.jnet.Server#getIOListeners()
-	 */
-	@Override
-	public ArrayList<IOListener> getIOListeners() {
-		return super.getIOListeners();
+		
 	}
 
 	/**
@@ -48,6 +43,22 @@ public class TextServer extends Server {
 	
 	public void addTextListener(TextIOListener listener) {
 		textListeners.add(listener);
+	}
+	
+	public void brodcast(String text) throws IOException {
+		for (NetConnection connection : getOpenConnections()) {
+			TextConnection tc = (TextConnection) connection;
+			tc.sendText(text);
+		}
+		
+	}
+	
+	/**
+	 * @see com.nbrugger.jnet.Server#getConnectionListener()
+	 */
+	@Override
+	protected ConnectionListener getConnectionListener() {
+		return new TextConnectionListener(this);
 	}
 	
 }
