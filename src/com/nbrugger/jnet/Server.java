@@ -11,11 +11,11 @@ import java.util.ArrayList;
  * @version 2018-09-14
  */
 public class Server {
-	private final ServerSocket socket;
-	private final ArrayList<NetConnection> openConnections = new ArrayList<>();
-	private final ArrayList<ServerListener> serverlistener = new ArrayList<>();
-	private final ArrayList<IOListener> listeners = new ArrayList<>();
-	private final ConnectionListener listener = new ConnectionListener(this);
+	protected final ServerSocket socket;
+	protected final ArrayList<NetConnection> openConnections = new ArrayList<>();
+	protected final ArrayList<ServerListener> serverlistener = new ArrayList<>();
+	protected final ArrayList<IOListener> listeners = new ArrayList<>();
+	protected ConnectionListener listener = getConnectionListener();
 	private final int port;
 	private int timeout = 5000;
 	private boolean isActive = false;
@@ -32,6 +32,10 @@ public class Server {
 	public Server(int port, int timeout) throws IOException {
 		this(port);
 		this.timeout = timeout;
+	}
+
+	protected ConnectionListener getConnectionListener() {
+		return new ConnectionListener(this);
 	}
 
 	public Server(int port) throws IOException {
@@ -67,7 +71,7 @@ public class Server {
 		serverlistener.add(listener);
 	}
 
-	void addConnection(NetConnection connection) {
+	public void addConnection(NetConnection connection) {
 		openConnections.add(connection);
 	}
 	public void addIOListener(IOListener listener) {

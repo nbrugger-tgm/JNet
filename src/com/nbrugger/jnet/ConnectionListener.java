@@ -9,7 +9,7 @@ import java.net.Socket;
  * @version 2018-09-15
  */
 public class ConnectionListener extends Thread {
-	private final Server server;
+	protected final Server server;
 	private boolean alive = true;
 	public ConnectionListener(Server server) {
 		this.server = server;
@@ -23,13 +23,22 @@ public class ConnectionListener extends Thread {
 			while(server.isActive()) {
 				try {
 					Socket s = server.getSocket().accept();
-					NetConnection connection = new NetConnection(s, server);
-					for(ServerListener listener : server.getServerlistener()) {
-						listener.onConnectionOpen(connection);
-					}
+					onSocketIncome(s);
 				} catch (IOException e) {
 				}
 			}
+		}
+	}
+	/**
+	 * <b>Description :</b><br>
+	 * 
+	 * @author Nils Brugger
+	 * @version 2018-09-18
+	 */
+	protected void onSocketIncome(Socket s) {
+		NetConnection connection = new NetConnection(s, server);
+		for(ServerListener listener : server.getServerlistener()) {
+			listener.onConnectionOpen(connection);
 		}
 	}
 	public void setAlive(boolean alive) {
