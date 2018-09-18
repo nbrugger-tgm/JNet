@@ -1,7 +1,11 @@
 package com.nbrugger.jnet;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.ArrayList;
@@ -52,6 +56,20 @@ public class NetConnection {
 		DataOutputStream dos = new DataOutputStream(connection.getOutputStream());
 		dos.writeInt(data.length);
 		dos.write(data);
+	}
+	
+	
+	public void streamData(InputStream in) throws IOException {
+		DataOutputStream dos = new DataOutputStream(connection.getOutputStream());
+		dos.writeInt(-1);
+		byte[] buffer = new byte[8*1024];
+		OutputStream out = connection.getOutputStream();
+		BufferedInputStream bis = new BufferedInputStream(in,buffer.length);
+		BufferedOutputStream bos = new BufferedOutputStream(out,buffer.length);
+		while(bis.read(buffer) != -1) {
+			bos.write(buffer);
+		}
+		bos.write(buffer);
 	}
 	
 	public void deactivate() {
