@@ -2,6 +2,7 @@ package com.nbrugger.test;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.Socket;
 import java.util.Arrays;
 
@@ -40,6 +41,10 @@ public class BasicServerTest {
 			@Override
 			public void connectionLost(NetConnection connection) {
 				System.out.println("DISSSCONECTED");
+			}
+
+			@Override
+			public void onStreamInput(NetConnection connection, InputStream stream) {
 			}
 		});
 		s.start();

@@ -42,10 +42,17 @@ public class StreamListener extends Thread {
 			} catch (InterruptedException e) {}
 			while(connection.isActive()) {
 				try {
-					byte[] data = new byte[dis.readInt()];
-					dis.read(data);
-					for (IOListener l : connection.getServer().getIOListeners()) {
-						l.onByteInput(connection, data);
+					int size = dis.readInt();
+					if(size == -1) {
+						for (IOListener l : connection.getServer().getIOListeners()) {
+							l.onStreamInput(connection, dis);
+						}
+					}else {
+						byte[] data = new byte[size];
+						dis.read(data);
+						for (IOListener l : connection.getServer().getIOListeners()) {
+							l.onByteInput(connection, data);
+						}
 					}
 				} catch (IOException e) {
 					for (IOListener l : connection.getServer().getIOListeners()) {
