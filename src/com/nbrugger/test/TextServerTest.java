@@ -15,50 +15,70 @@ import com.nbrugger.jnet.text.TextServer;
 
 /**
  * This is the TextServerTest Class
+ * 
  * @author Nils Brugger
  * @version 2018-09-18
  */
 public class TextServerTest {
 
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws Exception {
 		TextServer server = new TextServer(8889);
-		server.addTextListener(new TextIOListener() {
-			
+		server.addIOListener(new TextIOListener() {
+
 			@Override
 			public void onStreamInput(NetConnection connection, InputStream stream) {
-				System.out.println("Stream in");
+				try {
+					int b = stream.read();
+					while(b != -1)
+						b = stream.read();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
-			
+
 			@Override
 			public void connectionLost(NetConnection connection) {
 				System.out.println("Connection lost");
 			}
-			
+
 			@Override
 			public void onReciveText(String text, TextConnection connection) {
-				System.out.println("Recived : "+text);
+				System.out.println("Recived : " + text);
 			}
 		});
 		server.addServerListener(new ServerListener() {
-			
+
 			@Override
 			public void onStart() {
 				System.out.println("Server startup");
 			}
-			
+
 			@Override
 			public void onConnectionOpen(NetConnection net) {
 				System.out.println("Connection opened");
 			}
 		});
 		server.start();
-		
+
 		TextClient client1 = new TextClient("localhost", 8889);
 		client1.connect();
 		client1.getConnection().sendText("Ich bin es ! ");
-		ByteArrayInputStream bis = new ByteArrayInputStream(new byte[] {23,25,23,25,26});
+		client1.getConnection().sendText("Ich bin es2 ! ");
+		client1.getConnection().sendText("Ich bin es5 ! ");
+		Thread.sleep(2000);
+		ByteArrayInputStream bis = new ByteArrayInputStream(new byte[] { 23, 25, 23, 25, 26 });
 		client1.getConnection().streamData(bis);
+		Thread.sleep(2000);
 		client1.dissconnect();
+		Thread.sleep(2000);
+		client1.connect();
+		Thread.sleep(2000);
+		client1.getConnection().sendText("Da müssem wir wohl wieder seim");
+		Thread.sleep(2000);
+		client1.dissconnect();
+		Thread.sleep(2000);
+
+		server.stop();
 	}
 }
-
