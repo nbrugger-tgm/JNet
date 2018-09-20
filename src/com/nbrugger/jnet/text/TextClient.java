@@ -1,6 +1,8 @@
 package com.nbrugger.jnet.text;
 
-import java.net.Socket;
+import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.net.Socket;import java.net.SocketAddress;
 import java.util.ArrayList;
 
 import com.nbrugger.jnet.IOListener;
@@ -90,5 +92,12 @@ public class TextClient implements IOReciver {
 
 	public void activate() {
 		setActive(true);
+	}
+	
+	public void dissconnect() throws IOException {
+		connection.getConnection().close();
+	}
+	public void connect() throws IOException {
+		connection.getConnection().connect(new InetSocketAddress(adress, port));
 	}
 }
