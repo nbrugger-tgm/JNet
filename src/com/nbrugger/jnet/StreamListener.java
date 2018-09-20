@@ -26,7 +26,7 @@ public class StreamListener extends Thread {
 			dis = new DataInputStream(connection.getConnection().getInputStream());
 		} catch (IOException e1) {
 			e1.printStackTrace();
-			for (IOListener l : connection.getServer().getIOListeners()) {
+			for (IOListener l : connection.getListenerHolder().getIOListeners()) {
 				l.connectionLost(connection);
 			}
 			try {
@@ -44,18 +44,18 @@ public class StreamListener extends Thread {
 				try {
 					int size = dis.readInt();
 					if(size == -1) {
-						for (IOListener l : connection.getServer().getIOListeners()) {
+						for (IOListener l : connection.getListenerHolder().getIOListeners()) {
 							l.onStreamInput(connection, dis);
 						}
 					}else {
 						byte[] data = new byte[size];
 						dis.read(data);
-						for (IOListener l : connection.getServer().getIOListeners()) {
+						for (IOListener l : connection.getListenerHolder().getIOListeners()) {
 							l.onByteInput(connection, data);
 						}
 					}
 				} catch (IOException e) {
-					for (IOListener l : connection.getServer().getIOListeners()) {
+					for (IOListener l : connection.getListenerHolder().getIOListeners()) {
 						l.connectionLost(connection);
 					}
 					try {
