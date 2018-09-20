@@ -19,10 +19,10 @@ public class NetConnection {
 	private final Socket connection;
 	private final StreamListener listener = new StreamListener(this);
 	private boolean active = true;
-	private Server server;
+	private IOReciver listenerHolder;
 	
-	public NetConnection(Socket connection,Server s) {
-		this.setServer(s);
+	public NetConnection(Socket connection,IOReciver s) {
+		this.listenerHolder = s;
 		this.connection = connection;
 		try {
 			this.connection.setKeepAlive(true);
@@ -81,17 +81,18 @@ public class NetConnection {
 	public boolean isActive() {
 		return active;
 	}
+	
 	/**
-	 * @return the server
+	 * @return the listenerHolder
 	 */
-	public Server getServer() {
-		return server;
+	public IOReciver getListenerHolder() {
+		return listenerHolder;
 	}
 	/**
-	 * @param server the server to set
+	 * @param listenerHolder the listenerHolder to set
 	 */
-	public void setServer(Server server) {
-		this.server = server;
+	public void setListenerHolder(IOReciver listenerHolder) {
+		this.listenerHolder = listenerHolder;
 	}
 }
 
