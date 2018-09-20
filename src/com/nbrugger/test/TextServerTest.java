@@ -8,6 +8,7 @@ import java.net.Socket;
 
 import com.nbrugger.jnet.NetConnection;
 import com.nbrugger.jnet.ServerListener;
+import com.nbrugger.jnet.text.TextClient;
 import com.nbrugger.jnet.text.TextConnection;
 import com.nbrugger.jnet.text.TextIOListener;
 import com.nbrugger.jnet.text.TextServer;
@@ -51,21 +52,13 @@ public class TextServerTest {
 			}
 		});
 		server.start();
-		Socket binary = new Socket("localhost", 8889);
-		DataOutputStream dos = new DataOutputStream(binary.getOutputStream());
-		dos.writeInt(-1);
-		ByteArrayInputStream bis = new ByteArrayInputStream(new byte[] {23,25,23,25,26});
-		while(bis.available()>0) {
-			dos.writeByte(bis.read());
-		}
-		dos.writeInt(5);
-		dos.write(new byte[] {23,25,23,25,26});
-
-		Socket text = new Socket("localhost", 8889);
-		TextConnection textConnection = new TextConnection(text, server);
-		textConnection.sendText("ICH BIMS");
-		binary.close();
 		
+		TextClient client1 = new TextClient("localhost", 8889);
+		client1.connect();
+		client1.getConnection().sendText("Ich bin es ! ");
+		ByteArrayInputStream bis = new ByteArrayInputStream(new byte[] {23,25,23,25,26});
+		client1.getConnection().streamData(bis);
+		client1.dissconnect();
 	}
 }
 
