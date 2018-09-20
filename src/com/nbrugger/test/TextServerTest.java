@@ -78,7 +78,27 @@ public class TextServerTest {
 		Thread.sleep(2000);
 		client1.dissconnect();
 		Thread.sleep(2000);
+		
 
+		TextClient client2 = new TextClient("localhost", 8889);
+		client1.connect();
+		client2.addIOListener(new TextIOListener() {
+			
+			@Override
+			public void onStreamInput(NetConnection connection, InputStream stream) {}
+			
+			@Override
+			public void connectionLost(NetConnection connection) {
+				System.out.println("Mayday server ist weg");
+			}
+			
+			@Override
+			public void onReciveText(String text, TextConnection connection) {
+				System.out.println("We got a brot : ");
+			}
+		});
+		
+		server.brodcast("Hallo Hallo");
 		server.stop();
 	}
 }
