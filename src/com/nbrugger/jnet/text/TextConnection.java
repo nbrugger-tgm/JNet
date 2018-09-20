@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.Socket;
 
+import com.nbrugger.jnet.IOReciver;
 import com.nbrugger.jnet.NetConnection;
 import com.nbrugger.jnet.Server;
 
@@ -13,8 +14,8 @@ import com.nbrugger.jnet.Server;
  * @version 2018-09-17
  */
 public class TextConnection extends NetConnection {
-	public TextConnection(Socket connection, Server server) {
-		super(connection, server);
+	public TextConnection(Socket connection, IOReciver reciver) {
+		super(connection, reciver);
 	}
 	public void sendText(String text) throws IOException {
 		try {
