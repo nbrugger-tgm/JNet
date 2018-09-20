@@ -10,7 +10,7 @@ import java.util.ArrayList;
  * @author Nils Brugger
  * @version 2018-09-14
  */
-public class Server {
+public class Server implements IOReciver{
 	protected final ServerSocket socket;
 	protected final ArrayList<NetConnection> openConnections = new ArrayList<>();
 	protected final ArrayList<ServerListener> serverlistener = new ArrayList<>();
