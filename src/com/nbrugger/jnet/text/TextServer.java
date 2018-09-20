@@ -14,7 +14,6 @@ import com.nbrugger.jnet.Server;
  * @version 2018-09-17
  */
 public class TextServer extends Server {
-	private ArrayList<TextIOListener> textListeners = new ArrayList<>();
 	/**
 	 * Creates an Instance of TextServer.java
 	 * @author Nils Brugger
@@ -25,24 +24,6 @@ public class TextServer extends Server {
 	public TextServer(int port) throws IOException {
 		super(port);
 		
-	}
-
-	/**
-	 * @return the textListeners
-	 */
-	public ArrayList<TextIOListener> getTextListeners() {
-		return textListeners;
-	}
-
-	/**
-	 * @param textListeners the textListeners to set
-	 */
-	public void setTextListeners(ArrayList<TextIOListener> textListeners) {
-		this.textListeners = textListeners;
-	}
-	
-	public void addTextListener(TextIOListener listener) {
-		textListeners.add(listener);
 	}
 	
 	public void brodcast(String text) throws IOException {

@@ -21,8 +21,6 @@ public class TextConnection extends NetConnection {
 		try {
 			sendData(text.getBytes("UTF-8"));
 		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 	}
 }

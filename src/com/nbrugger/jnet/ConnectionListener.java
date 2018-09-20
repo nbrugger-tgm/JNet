@@ -12,6 +12,7 @@ public class ConnectionListener extends Thread {
 	protected final Server server;
 	private boolean alive = true;
 	public ConnectionListener(Server server) {
+		super("Connection Listener");
 		this.server = server;
 	}
 	public void run() {

@@ -100,5 +100,11 @@ public class NetConnection {
 	public void setListenerHolder(IOReciver listenerHolder) {
 		this.listenerHolder = listenerHolder;
 	}
+	
+	public void close() throws IOException {
+		deactivate();
+		listener.kill();
+		connection.close();
+	}
 }
 

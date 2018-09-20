@@ -2,7 +2,9 @@ package com.nbrugger.jnet.text;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
-import java.net.Socket;import java.net.SocketAddress;
+import java.net.Socket;
+import java.net.SocketAddress;
+import java.net.SocketException;
 import java.util.ArrayList;
 
 import com.nbrugger.jnet.IOListener;
@@ -42,14 +44,10 @@ public class TextClient implements IOReciver {
 	}
 
 	protected final ArrayList<IOListener> listeners = new ArrayList<>();
-	private StreamListener listener;
 
 	public TextClient(String adress, int port) {
 		this.adress = adress;
 		this.port = port;
-		connection = new TextConnection(new Socket(), this);
-		listener = new StreamListener(connection);
-		listener.start();
 	}
 
 	public void addIOListener(IOListener listener) {
@@ -93,11 +91,20 @@ public class TextClient implements IOReciver {
 	public void activate() {
 		setActive(true);
 	}
-	
+
 	public void dissconnect() throws IOException {
-		connection.getConnection().close();
+		if(connection != null && connection.getConnection().isClosed())
+			throw new SocketException("Allready Closed");
+		connection.close();
+		connection = null;
+		System.gc();
 	}
+
 	public void connect() throws IOException {
-		connection.getConnection().connect(new InetSocketAddress(adress, port));
+		if(connection == null) {
+			connection = new TextConnection(new Socket(), this);
+			connection.getConnection().connect(new InetSocketAddress(adress, port));
+		}else
+			throw new SocketException("Socket allready bound");
 	}
 }

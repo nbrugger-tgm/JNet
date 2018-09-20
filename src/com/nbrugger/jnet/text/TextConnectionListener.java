@@ -1,10 +1,8 @@
 package com.nbrugger.jnet.text;
 
-import java.io.IOException;
 import java.net.Socket;
 
 import com.nbrugger.jnet.ConnectionListener;
-import com.nbrugger.jnet.NetConnection;
 import com.nbrugger.jnet.ServerListener;
 
 /**
@@ -25,6 +23,8 @@ public class TextConnectionListener extends ConnectionListener {
 	@Override
 	protected void onSocketIncome(Socket s) {
 		TextConnection c = new TextConnection(s, server);
-		server.addConnection(c);
+		for(ServerListener listener : server.getServerlistener()) {
+			listener.onConnectionOpen(c);
+		}
 	}
 }
