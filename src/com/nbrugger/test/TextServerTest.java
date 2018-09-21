@@ -61,27 +61,27 @@ public class TextServerTest {
 		});
 		server.start();
 
-		TextClient client1 = new TextClient("localhost", 8889);
-		client1.connect();
-		client1.getConnection().sendText("Ich bin es ! ");
-		client1.getConnection().sendText("Ich bin es2 ! ");
-		client1.getConnection().sendText("Ich bin es5 ! ");
-		Thread.sleep(2000);
-		ByteArrayInputStream bis = new ByteArrayInputStream(new byte[] { 23, 25, 23, 25, 26 });
-		client1.getConnection().streamData(bis);
-		Thread.sleep(2000);
-		client1.dissconnect();
-		Thread.sleep(2000);
-		client1.connect();
-		Thread.sleep(2000);
-		client1.getConnection().sendText("Da müssem wir wohl wieder seim");
-		Thread.sleep(2000);
-		client1.dissconnect();
-		Thread.sleep(2000);
+//		TextClient client1 = new TextClient("localhost", 8889);
+//		client1.connect();
+//		client1.getConnection().sendText("Ich bin es ! ");
+//		client1.getConnection().sendText("Ich bin es2 ! ");
+//		client1.getConnection().sendText("Ich bin es5 ! ");
+//		Thread.sleep(2000);
+//		ByteArrayInputStream bis = new ByteArrayInputStream(new byte[] { 23, 25, 23, 25, 26 });
+//		client1.getConnection().streamData(bis);
+//		Thread.sleep(2000);
+//		client1.dissconnect();
+//		Thread.sleep(2000);
+//		client1.connect();
+//		Thread.sleep(2000);
+//		client1.getConnection().sendText("Da müssem wir wohl wieder seim");
+//		Thread.sleep(2000);
+//		client1.dissconnect();
+//		Thread.sleep(2000);
+//		client1.connect();
 		
 
 		TextClient client2 = new TextClient("localhost", 8889);
-		client1.connect();
 		client2.addIOListener(new TextIOListener() {
 			
 			@Override
@@ -89,14 +89,16 @@ public class TextServerTest {
 			
 			@Override
 			public void connectionLost(NetConnection connection) {
-				System.out.println("Mayday server ist weg");
+				System.out.println("mama server ist weg");
 			}
 			
 			@Override
 			public void onReciveText(String text, TextConnection connection) {
-				System.out.println("We got a brot : ");
+				System.out.println("We got a brot : "+text);
 			}
 		});
+		client2.connect();
+		Thread.sleep(5000);
 		
 		server.brodcast("Hallo Hallo");
 		server.stop();

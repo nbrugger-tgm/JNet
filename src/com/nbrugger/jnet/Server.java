@@ -112,9 +112,7 @@ public class Server implements IOReciver{
 			listener.setAlive(false);
 			socket.close();
 			for (NetConnection netConnection : openConnections) {
-				netConnection.deactivate();
-				while(netConnection.getListener().isAlive())
-					netConnection.getListener().interrupt();
+				netConnection.close();
 			}
 		} catch (IOException e) {
 		}

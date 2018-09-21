@@ -44,14 +44,6 @@ public class NetConnection {
 	public StreamListener getListener() {
 		return listener;
 	}
-	/**
-	 * <b>Description :</b><br>
-	 * 
-	 * @author Nils Brugger
-	 * @version 2018-09-17
-	 * @param data
-	 * @throws IOException 
-	 */
 	public void sendData(byte[] data) throws IOException {
 		DataOutputStream dos = new DataOutputStream(connection.getOutputStream());
 		dos.writeInt(data.length);

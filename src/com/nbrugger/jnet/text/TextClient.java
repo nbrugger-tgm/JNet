@@ -21,6 +21,7 @@ public class TextClient implements IOReciver {
 	private TextConnection connection;
 	private final String adress;
 	private final int port;
+	protected final ArrayList<IOListener> listeners = new ArrayList<>();
 
 	/**
 	 * @return the adress
@@ -43,7 +44,6 @@ public class TextClient implements IOReciver {
 		return listeners;
 	}
 
-	protected final ArrayList<IOListener> listeners = new ArrayList<>();
 
 	public TextClient(String adress, int port) {
 		this.adress = adress;
