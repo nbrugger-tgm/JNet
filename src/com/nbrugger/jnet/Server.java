@@ -42,6 +42,7 @@ public class Server implements IOReciver{
 		this.port = port;
 		socket = new ServerSocket(port);
 		serverlistener.add(new DefaultConnectionListener(this));
+		listeners.add(new RemoveInactivityListener(this));
 		listener.start();
 	}
 
