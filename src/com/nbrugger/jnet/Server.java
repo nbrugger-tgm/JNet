@@ -95,6 +95,11 @@ public class Server implements IOReciver{
 
 	public void start() {
 		isActive = true;
+		if(isActive) {
+			for (ServerListener serverListener : serverlistener) {
+				serverListener.onStart();
+			}
+		}
 	}
 
 	public void pause() {
@@ -103,8 +108,12 @@ public class Server implements IOReciver{
 
 	public void stop() {
 		try {
-			socket.close();
+			setActive(false);
 			listener.setAlive(false);
+			socket.close();
+			for (NetConnection netConnection : openConnections) {
+				netConnection.close();
+			}
 		} catch (IOException e) {
 		}
 	}
