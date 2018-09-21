@@ -18,7 +18,7 @@ import com.nbrugger.jnet.StreamListener;
  * @version 2018-09-20
  */
 public class Client implements IOReciver {
-	private TextConnection connection;
+	private NetConnection connection;
 	private final String adress;
 	private final int port;
 	protected final ArrayList<IOListener> listeners = new ArrayList<>();
@@ -62,11 +62,11 @@ public class Client implements IOReciver {
 		return listeners;
 	}
 
-	public TextConnection getConnection() {
+	public NetConnection getConnection() {
 		return connection;
 	}
 
-	public void setConnection(TextConnection connection) {
+	public void setConnection(NetConnection connection) {
 		this.connection = connection;
 	}
 
