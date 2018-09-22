@@ -10,25 +10,16 @@ import java.util.ArrayList;
  * @author Nils Brugger
  * @version 2018-09-14
  */
-public class Server implements IOReciver{
+public abstract class Server implements ConnectionStateReciver{
 	protected final ServerSocket socket;
 	protected final ArrayList<NetConnection> openConnections = new ArrayList<>();
-	protected final ArrayList<ServerListener> serverlistener = new ArrayList<>();
-	protected final ArrayList<IOListener> listeners = new ArrayList<>();
+	protected final ArrayList<ConnectionStateListener> serverlistener = new ArrayList<>();
 	protected ConnectionListener listener = getConnectionListener();
 	private final int port;
 	private int timeout = 5000;
 	private boolean isActive = false;
+	private boolean firstStartup = true;
 
-	/**
-	 * Creates an Instance of Server.java
-	 * 
-	 * @author Nils Brugger
-	 * @version 2018-09-15
-	 * @param port
-	 * @param timeout
-	 * @throws IOException
-	 */
 	public Server(int port, int timeout) throws IOException {
 		this(port);
 		this.timeout = timeout;
@@ -42,8 +33,8 @@ public class Server implements IOReciver{
 		this.port = port;
 		socket = new ServerSocket(port);
 		serverlistener.add(new DefaultConnectionListener(this));
-		listeners.add(new RemoveInactivityListener(this));
 		listener.start();
+		
 	}
 
 	public int getPort() {
@@ -64,21 +55,17 @@ public class Server implements IOReciver{
 	/**
 	 * @return the serverlistener
 	 */
-	public ArrayList<ServerListener> getServerlistener() {
+	public ArrayList<ConnectionStateListener> getConnectionStateListeners() {
 		return serverlistener;
 	}
 
-	public void addServerListener(ServerListener listener) {
+	public void addConnectionStateListener(ConnectionStateListener listener) {
 		serverlistener.add(listener);
 	}
 
 	public void addConnection(NetConnection connection) {
 		openConnections.add(connection);
 	}
-	public void addIOListener(IOListener listener) {
-		listeners.add(listener);
-	}
-
 	/**
 	 * @return the socket
 	 */
@@ -93,21 +80,20 @@ public class Server implements IOReciver{
 		return isActive;
 	}
 
-	public void start() {
+	public final void start() {
+		if(firstStartup)
+			onStart();
+		firstStartup = false;
 		isActive = true;
-		if(isActive) {
-			for (ServerListener serverListener : serverlistener) {
-				serverListener.onStart();
-			}
-		}
 	}
 
-	public void pause() {
+	public final void pause() {
 		isActive = false;
 	}
 
-	public void stop() {
+	public final void stop() {
 		try {
+			onStop();
 			setActive(false);
 			listener.setAlive(false);
 			socket.close();
@@ -118,6 +104,9 @@ public class Server implements IOReciver{
 		}
 	}
 
+	protected abstract void onStart();
+	protected abstract void onStop();
+
 	/**
 	 * @param isActive the isActive to set
 	 */
@@ -125,16 +114,4 @@ public class Server implements IOReciver{
 		this.isActive = isActive;
 	}
 	
-	public void brodcast(byte[] data) throws IOException {
-		for (NetConnection netConnection : openConnections) {
-			netConnection.sendData(data);
-		}
-	}
-
-	/**
-	 * @return the listeners
-	 */
-	public ArrayList<IOListener> getIOListeners() {
-		return listeners;
-	}
 }

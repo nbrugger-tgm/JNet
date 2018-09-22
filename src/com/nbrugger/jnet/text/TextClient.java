@@ -7,9 +7,9 @@ import java.net.SocketAddress;
 import java.net.SocketException;
 import java.util.ArrayList;
 
-import com.nbrugger.jnet.IOListener;
+import com.nbrugger.jnet.Binary;
 import com.nbrugger.jnet.IOReciver;
-import com.nbrugger.jnet.StreamListener;
+import com.nbrugger.jnet.binary.BinaryStreamListener;
 
 /**
  * This is the TextClient Class
@@ -21,7 +21,7 @@ public class TextClient implements IOReciver {
 	private TextConnection connection;
 	private final String adress;
 	private final int port;
-	protected final ArrayList<IOListener> listeners = new ArrayList<>();
+	protected final ArrayList<Binary> listeners = new ArrayList<>();
 
 	/**
 	 * @return the adress
@@ -40,7 +40,7 @@ public class TextClient implements IOReciver {
 	/**
 	 * @return the listeners
 	 */
-	public ArrayList<IOListener> getListeners() {
+	public ArrayList<Binary> getListeners() {
 		return listeners;
 	}
 
@@ -50,15 +50,15 @@ public class TextClient implements IOReciver {
 		this.port = port;
 	}
 
-	public void addIOListener(IOListener listener) {
+	public void addIOListener(Binary listener) {
 		listeners.add(listener);
 	}
 
-	public void removeIOListener(IOListener listener) {
+	public void removeIOListener(Binary listener) {
 		listeners.remove(listener);
 	}
 
-	public ArrayList<IOListener> getIOListeners() {
+	public ArrayList<Binary> getIOListeners() {
 		return listeners;
 	}
 

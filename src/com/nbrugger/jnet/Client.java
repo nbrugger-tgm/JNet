@@ -7,9 +7,9 @@ import java.net.SocketAddress;
 import java.net.SocketException;
 import java.util.ArrayList;
 
-import com.nbrugger.jnet.IOListener;
+import com.nbrugger.jnet.Binary;
 import com.nbrugger.jnet.IOReciver;
-import com.nbrugger.jnet.StreamListener;
+import com.nbrugger.jnet.binary.BinaryStreamListener;
 
 /**
  * This is the TextClient Class
@@ -17,11 +17,11 @@ import com.nbrugger.jnet.StreamListener;
  * @author Nils Brugger
  * @version 2018-09-20
  */
-public class Client implements IOReciver {
+public class Client implements ConnectionStateReciver {
 	private NetConnection connection;
 	private final String adress;
 	private final int port;
-	protected final ArrayList<IOListener> listeners = new ArrayList<>();
+	private final ArrayList<ConnectionStateListener> listeners = new ArrayList<>();
 
 	/**
 	 * @return the adress
@@ -40,7 +40,7 @@ public class Client implements IOReciver {
 	/**
 	 * @return the listeners
 	 */
-	public ArrayList<IOListener> getListeners() {
+	public ArrayList<Binary> getListeners() {
 		return listeners;
 	}
 
@@ -50,15 +50,15 @@ public class Client implements IOReciver {
 		this.port = port;
 	}
 
-	public void addIOListener(IOListener listener) {
+	public void addIOListener(Binary listener) {
 		listeners.add(listener);
 	}
 
-	public void removeIOListener(IOListener listener) {
+	public void removeIOListener(Binary listener) {
 		listeners.remove(listener);
 	}
 
-	public ArrayList<IOListener> getIOListeners() {
+	public ArrayList<Binary> getIOListeners() {
 		return listeners;
 	}
 
@@ -102,9 +102,16 @@ public class Client implements IOReciver {
 
 	public void connect() throws IOException {
 		if(connection == null) {
-			connection = new TextConnection(new Socket(), this);
+			connection = new NetConnection(new Socket());
 			connection.getConnection().connect(new InetSocketAddress(adress, port));
 		}else
 			throw new SocketException("Socket allready bound");
+	}
+	public void addConnectionStateListener(ConnectionStateListener listener) {
+		listeners.add(listener);
+	}
+	@Override
+	public ArrayList<ConnectionStateListener> getConnectionStateListeners() {
+		return listeners;
 	}
 }

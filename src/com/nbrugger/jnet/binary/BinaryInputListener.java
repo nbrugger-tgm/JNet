@@ -1,16 +1,15 @@
-package com.nbrugger.jnet;
+package com.nbrugger.jnet.binary;
 
 import java.io.InputStream;
 
-import sun.nio.ch.Net;
+import com.nbrugger.jnet.NetConnection;
 
 /**
  * This is the IOListener Class
  * @author Nils Brugger
  * @version 2018-09-15
  */
-public interface IOListener {
-	public void connectionLost(NetConnection connection);
+public interface BinaryInputListener {
 	public void onByteInput(NetConnection connection,byte[] b);
 	public void onStreamInput(NetConnection connection, InputStream stream);
 }

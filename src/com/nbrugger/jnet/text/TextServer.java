@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import com.nbrugger.jnet.ConnectionListener;
-import com.nbrugger.jnet.IOListener;
+import com.nbrugger.jnet.Binary;
 import com.nbrugger.jnet.NetConnection;
 import com.nbrugger.jnet.Server;
 

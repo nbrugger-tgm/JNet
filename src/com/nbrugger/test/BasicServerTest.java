@@ -6,10 +6,10 @@ import java.io.InputStream;
 import java.net.Socket;
 import java.util.Arrays;
 
-import com.nbrugger.jnet.IOListener;
+import com.nbrugger.jnet.Binary;
 import com.nbrugger.jnet.NetConnection;
 import com.nbrugger.jnet.Server;
-import com.nbrugger.jnet.ServerListener;
+import com.nbrugger.jnet.ConnectionStateListener;
 
 /**
  * This is the BasicServerTest Class
@@ -19,7 +19,7 @@ import com.nbrugger.jnet.ServerListener;
 public class BasicServerTest {
 	public static void main(String[] args) throws IOException {
 		Server s = new Server(8888);
-		s.addServerListener(new ServerListener() {
+		s.addServerListener(new ConnectionStateListener() {
 			
 			@Override
 			public void onStart() {
@@ -31,7 +31,7 @@ public class BasicServerTest {
 				System.out.println("New connection opened on server : "+net.getConnection().getInetAddress().getHostAddress());;
 			}
 		});
-		s.addIOListener(new IOListener() {
+		s.addIOListener(new Binary() {
 			
 			@Override
 			public void onByteInput(NetConnection connection, byte[] b) {

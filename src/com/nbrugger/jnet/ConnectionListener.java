@@ -37,8 +37,8 @@ public class ConnectionListener extends Thread {
 	 * @version 2018-09-18
 	 */
 	protected void onSocketIncome(Socket s) {
-		NetConnection connection = new NetConnection(s, server);
-		for(ServerListener listener : server.getServerlistener()) {
+		NetConnection connection = new NetConnection(s);
+		for(ConnectionStateListener listener : server.getConnectionStateListeners()) {
 			listener.onConnectionOpen(connection);
 		}
 	}

@@ -1,13 +1,15 @@
 package com.nbrugger.test;
 
+import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStreamWriter;
 import java.net.Socket;
 
 import com.nbrugger.jnet.NetConnection;
-import com.nbrugger.jnet.ServerListener;
+import com.nbrugger.jnet.ConnectionStateListener;
 import com.nbrugger.jnet.text.TextClient;
 import com.nbrugger.jnet.text.TextConnection;
 import com.nbrugger.jnet.text.TextIOListener;
@@ -47,7 +49,7 @@ public class TextServerTest {
 				System.out.println("Recived : " + text);
 			}
 		});
-		server.addServerListener(new ServerListener() {
+		server.addServerListener(new ConnectionStateListener() {
 
 			@Override
 			public void onStart() {
@@ -81,26 +83,29 @@ public class TextServerTest {
 //		client1.connect();
 		
 
-		TextClient client2 = new TextClient("localhost", 8889);
-		client2.addIOListener(new TextIOListener() {
-			
-			@Override
-			public void onStreamInput(NetConnection connection, InputStream stream) {}
-			
-			@Override
-			public void connectionLost(NetConnection connection) {
-				System.out.println("mama server ist weg");
-			}
-			
-			@Override
-			public void onReciveText(String text, TextConnection connection) {
-				System.out.println("We got a brot : "+text);
-			}
-		});
-		client2.connect();
-		Thread.sleep(5000);
-		
-		server.brodcast("Hallo Hallo");
-		server.stop();
+//		TextClient client2 = new TextClient("localhost", 8889);
+//		client2.addIOListener(new TextIOListener() {
+//			
+//			@Override
+//			public void onStreamInput(NetConnection connection, InputStream stream) {}
+//			
+//			@Override
+//			public void connectionLost(NetConnection connection) {
+//				System.out.println("mama server ist weg");
+//			}
+//			
+//			@Override
+//			public void onReciveText(String text, TextConnection connection) {
+//				System.out.println("We got a brot : "+text);
+//			}
+//		});
+//		client2.connect();
+//		server.stop();
+		Socket s = new Socket("localhost", 8889);
+		new DataOutputStream(s.getOutputStream()).writeInt(6);
+//		new DataOutputStream(s.getOutputStream()).write(new byte[] {1,2,3,4,5,6});
+		BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(s.getOutputStream()));
+		writer.write("a");
+//		s.close();
 	}
 }

@@ -1,9 +1,10 @@
-package com.nbrugger.jnet.text;
+package com.nbrugger.jnet.binary;
 
 import java.net.Socket;
 
 import com.nbrugger.jnet.ConnectionListener;
 import com.nbrugger.jnet.ConnectionStateListener;
+import com.nbrugger.jnet.ConnectionStateReciver;
 
 /**
  * This is the TextConnectionListener Class
@@ -11,9 +12,9 @@ import com.nbrugger.jnet.ConnectionStateListener;
  * @author Nils Brugger
  * @version 2018-09-18
  */
-public class TextConnectionListener extends ConnectionListener {
+public class BinaryConnectionListener extends ConnectionListener {
 
-	public TextConnectionListener(TextServer server) {
+	public BinaryConnectionListener(BinaryServer server) {
 		super(server);
 	}
 
@@ -22,8 +23,8 @@ public class TextConnectionListener extends ConnectionListener {
 	 */
 	@Override
 	protected void onSocketIncome(Socket s) {
-		TextConnection c = new TextConnection(s, server);
-		for(ConnectionStateListener listener : server.getServerlistener()) {
+		BinaryConnection c = new BinaryConnection(s, (BinaryReciver) server,server);
+		for(ConnectionStateListener listener : server.getConnectionStateListeners()) {
 			listener.onConnectionOpen(c);
 		}
 	}
