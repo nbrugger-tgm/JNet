@@ -26,6 +26,6 @@ public class DefaultConnectionListener implements ConnectionStateListener {
 	 */
 	@Override
 	public void onConnectionCloses(NetConnection net) {
-		s.openConnections.remove(net);
+		net.setActive(false);
 	}
 }

@@ -1,7 +1,9 @@
 package com.nbrugger.test;
 
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.Socket;
 import java.util.Arrays;
 
 import com.nbrugger.jnet.NetConnection;
@@ -27,7 +29,7 @@ public class BinaryTest {
 			
 			@Override
 			public void onByteInput(NetConnection connection, byte[] b) {
-				System.out.println("Server recive beits : "+Arrays.toString(b));
+				System.out.println("Server recive beits : "+b.length);
 			}
 		});
 		server.addConnectionStateListener(new ConnectionStateListener() {
@@ -43,6 +45,22 @@ public class BinaryTest {
 			}
 		});
 		server.start();
+		
+		Socket s = new Socket("localhost", 888);
+		DataOutputStream dos = new DataOutputStream(s.getOutputStream());
+		byte[] sdata = new byte[] {1,2,3,5,6,7,8,9,10};
+		dos.writeInt(sdata.length);
+		dos.write(sdata);
+		sdata = new byte[9*10000];
+		dos.writeInt(sdata.length);
+		dos.write(sdata);
+		s.close();
+		try {
+			Thread.sleep(20000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+//		server.stop();
 	}
 }
 

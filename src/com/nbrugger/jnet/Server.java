@@ -3,6 +3,7 @@ package com.nbrugger.jnet;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.util.ArrayList;
+import java.util.function.Consumer;
 
 /**
  * This is the Server Class
@@ -100,6 +101,7 @@ public abstract class Server implements ConnectionStateReciver{
 			for (NetConnection netConnection : openConnections) {
 				netConnection.close();
 			}
+			openConnections.clear();
 		} catch (IOException e) {
 		}
 	}

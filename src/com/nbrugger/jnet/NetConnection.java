@@ -50,13 +50,14 @@ public class NetConnection {
 
 	
 	public void close() throws IOException {
+		listener.kill();
 		deactivate();
 		connection.close();
 	}
 	/**
 	 * @return the listener
 	 */
-	private StreamListener getListener() {
+	protected StreamListener getListener() {
 		return new StreamListener(this) {
 			@Override
 			public void run() {

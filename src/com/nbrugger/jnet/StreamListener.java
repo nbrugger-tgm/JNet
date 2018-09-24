@@ -10,7 +10,7 @@ public abstract class StreamListener extends Thread {
 	protected final NetConnection connection;
 
 	public StreamListener(NetConnection connection) {
-		super();
+		super("Stream Listener");
 		this.connection = connection;
 	}
 

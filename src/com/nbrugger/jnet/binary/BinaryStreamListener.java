@@ -17,12 +17,9 @@ import com.nbrugger.jnet.StreamListener;
  */
 public class BinaryStreamListener extends StreamListener {
 
-	private final BinaryReciver server;
-	private final ConnectionStateReciver reciver;
-	public BinaryStreamListener(NetConnection connection,BinaryReciver server,ConnectionStateReciver reciver) {
+
+	public BinaryStreamListener(BinaryConnection connection) {
 		super(connection);
-		this.server = server;
-		this.reciver = reciver;
 	}
 
 	/**
@@ -31,38 +28,38 @@ public class BinaryStreamListener extends StreamListener {
 	@Override
 	public void run() {
 		DataInputStream dis;
-		
-		while(isActive()) {
+
+		while (isActive()) {
 			try {
 				Thread.sleep(200);
-			} catch (InterruptedException e) {}
+			} catch (InterruptedException e) {
+			}
 			try {
 				dis = new DataInputStream(connection.getConnection().getInputStream());
 			} catch (IOException e1) {
 				continue;
 			}
-			while(connection.isActive()) {
+			while (connection.isActive()) {
 				try {
 					int size = dis.readInt();
-					if(size == -1) {
-						for (BinaryInputListener l : server.getIOListeners()) {
+					if (size == -1) {
+						for (BinaryInputListener l : ((BinaryConnection)connection).getBinreciver().getIOListeners()) {
 							l.onStreamInput(connection, dis);
 						}
-					}else {
+					} else {
 						byte[] data = new byte[size];
 						dis.read(data);
-						for (BinaryInputListener l : server.getIOListeners()) {
+						for (BinaryInputListener l : ((BinaryConnection)connection).getBinreciver().getIOListeners()) {
 							l.onByteInput(connection, data);
 						}
 					}
 				} catch (IOException e) {
-					if(server instanceof Server)
-						for (ConnectionStateListener l : reciver.getConnectionStateListeners()) {
-							l.onConnectionCloses(connection);
-						}
+					connection.setActive(false);
+					for (ConnectionStateListener l : ((BinaryConnection)connection).getConnectionStateReciver().getConnectionStateListeners()) {
+						l.onConnectionCloses(connection);
+					}
 					try {
 						connection.getConnection().close();
-						connection.setActive(false);
 					} catch (IOException e1) {
 						e1.printStackTrace();
 					}
@@ -70,5 +67,4 @@ public class BinaryStreamListener extends StreamListener {
 			}
 		}
 	}
-	
 }

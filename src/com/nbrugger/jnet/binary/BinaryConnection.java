@@ -11,6 +11,7 @@ import java.util.ArrayList;
 
 import com.nbrugger.jnet.ConnectionStateReciver;
 import com.nbrugger.jnet.NetConnection;
+import com.nbrugger.jnet.StreamListener;
 
 /**
  * This is the BinaryConnection Class
@@ -19,12 +20,13 @@ import com.nbrugger.jnet.NetConnection;
  */
 public class BinaryConnection extends NetConnection {
 
-	private BinaryStreamListener streamListeners;
+	private final BinaryReciver binreciver;
+	private final ConnectionStateReciver connectionStateReciver;
 
 	public BinaryConnection(Socket connection,BinaryReciver server,ConnectionStateReciver reciver) {
 		super(connection);
-		streamListeners = new BinaryStreamListener(this, server,reciver);
-		streamListeners.start();
+		binreciver = server;
+		connectionStateReciver = reciver; 
 	}
 
 	public void sendData(byte[] data) throws IOException {
@@ -44,6 +46,30 @@ public class BinaryConnection extends NetConnection {
 			bos.write(buffer);
 		}
 		bos.write(buffer);
+	}
+	
+
+
+	/**
+	 * @return the binreciver
+	 */
+	public BinaryReciver getBinreciver() {
+		return binreciver;
+	}
+
+	/**
+	 * @return the connectionStateReciver
+	 */
+	public ConnectionStateReciver getConnectionStateReciver() {
+		return connectionStateReciver;
+	}
+	
+	/**
+	 * @see com.nbrugger.jnet.NetConnection#getListener()
+	 */
+	@Override
+	protected StreamListener getListener() {
+		return new BinaryStreamListener(this);
 	}
 
 }
