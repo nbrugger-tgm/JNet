@@ -1,9 +1,11 @@
 package com.nbrugger.jnet.text;
 
+import java.io.IOException;
 import java.net.Socket;
 
 import com.nbrugger.jnet.ConnectionListener;
 import com.nbrugger.jnet.ConnectionStateListener;
+import com.nbrugger.jnet.ConnectionStateReciver;
 
 /**
  * This is the TextConnectionListener Class
@@ -22,8 +24,14 @@ public class TextConnectionListener extends ConnectionListener {
 	 */
 	@Override
 	protected void onSocketIncome(Socket s) {
-		TextConnection c = new TextConnection(s, server);
-		for(ConnectionStateListener listener : server.getServerlistener()) {
+		TextConnection c = null;
+		try {
+			c = new TextConnection(s, (TextReciver) server,server);
+		} catch (IOException e) {
+			System.err.println("Failed reciving text connection");
+			e.printStackTrace();
+		}
+		for(ConnectionStateListener listener : server.getConnectionStateListeners()) {
 			listener.onConnectionOpen(c);
 		}
 	}
