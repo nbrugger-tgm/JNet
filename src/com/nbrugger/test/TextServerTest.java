@@ -44,7 +44,7 @@ public class TextServerTest {
 			@Override
 			public void onTextInput(BufferedTextConnection connection, String b) {
 				try {
-					connection.sendData("HTTP/1.1 200 OK\n\nIBIMZ\n");
+					connection.sendData("HTTP/1.1 200 OK\n\n"+b);
 					connection.close();
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
