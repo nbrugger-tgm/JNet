@@ -41,6 +41,14 @@ public class TextServerTest {
 			@Override
 			public void onTextInput(TextConnection connection, String b) {
 				System.out.println("DEXT : "+b);
+				if(b.length()<2)
+				try {
+					connection.sendData("HTTP/1.1 200 OK\n\nIBIMZ\n");
+					connection.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 			
 			@Override
