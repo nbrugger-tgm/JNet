@@ -13,6 +13,9 @@ import com.nbrugger.jnet.NetConnection;
 import com.nbrugger.jnet.text.TextConnection;
 import com.nbrugger.jnet.text.TextInputListener;
 import com.nbrugger.jnet.text.TextServer;
+import com.nbrugger.jnet.text.buffering.BufferedTextConnection;
+import com.nbrugger.jnet.text.buffering.BufferedTextInputListener;
+import com.nbrugger.jnet.text.buffering.BufferedTextServer;
 
 /**
  * This is the TextServerTest Class
@@ -23,7 +26,7 @@ import com.nbrugger.jnet.text.TextServer;
 public class TextServerTest {
 
 	public static void main(String[] args) throws Exception {
-		TextServer server = new TextServer(80, 50);
+		BufferedTextServer server = new BufferedTextServer(80, 50);
 		server.addConnectionStateListener(new ConnectionStateListener() {
 			
 			@Override
@@ -36,26 +39,13 @@ public class TextServerTest {
 				System.out.println("Close");
 			}
 		});
-		server.addIOListener(new TextInputListener() {
+		server.addIOListener(new BufferedTextInputListener() {
 			
 			@Override
-			public void onTextInput(TextConnection connection, String b) {
-				System.out.println("DEXT : "+b);
-				if(b.length()<2)
+			public void onTextInput(BufferedTextConnection connection, String b) {
 				try {
 					connection.sendData("HTTP/1.1 200 OK\n\nIBIMZ\n");
 					connection.close();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-			
-			@Override
-			public void onStreamInput(TextConnection connection, BufferedReader stream) {
-				System.out.println("STREEM");
-				try {
-					connection.sendData("Gutte Streeem\n");
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

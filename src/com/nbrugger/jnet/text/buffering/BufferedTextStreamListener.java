@@ -1,11 +1,8 @@
 package com.nbrugger.jnet.text.buffering;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.nio.CharBuffer;
-import java.util.stream.Collectors;
 
 import com.nbrugger.jnet.ConnectionStateListener;
 import com.nbrugger.jnet.StreamListener;
@@ -17,7 +14,6 @@ import com.nbrugger.jnet.StreamListener;
  * @version 2018-09-15
  */
 public class BufferedTextStreamListener extends StreamListener {
-
 	public BufferedTextStreamListener(BufferedTextConnection connection) {
 		super(connection);
 	}
@@ -36,35 +32,38 @@ public class BufferedTextStreamListener extends StreamListener {
 			}
 			try {
 				dis = new BufferedReader(new InputStreamReader(connection.getConnection().getInputStream()));
-				
+
 			} catch (IOException e1) {
 				continue;
 			}
 			while (connection.isActive()) {
-//				try {
-					String in = dis.lines().collect(Collectors.joining());;
-					if(in == null) {
-						for (ConnectionStateListener l : ((BufferedTextConnection) connection).getConnectionStateReciver()
-								.getConnectionStateListeners()) {
-							l.onConnectionCloses(connection);
-						}
-						continue;
-					}
-					for (BufferedTextInputListener l : ((BufferedTextConnection) connection).getBinreciver().getIOListeners()) {
-						l.onTextInput((BufferedTextConnection) connection, in);
-					}
-//				} catch (IOException e) {
-//					connection.setActive(false);
+				try {
+					StringBuilder builder = new StringBuilder();
+					String line;
+					while(((BufferedTextConnection)connection).getEnder().onClose() ? (line = dis.readLine()) != null : !((line = dis.readLine()).equals(((BufferedTextConnection)connection).getEnder().getMessageEnd())))
+						builder.append(line);
 //					for (ConnectionStateListener l : ((BufferedTextConnection) connection).getConnectionStateReciver()
 //							.getConnectionStateListeners()) {
 //						l.onConnectionCloses(connection);
 //					}
-//					try {
-//						connection.getConnection().close();
-//					} catch (IOException e1) {
-//						e1.printStackTrace();
-//					}
-//				}
+//					continue;
+
+					for (BufferedTextInputListener l : ((BufferedTextConnection) connection).getBinreciver()
+							.getIOListeners()) {
+						l.onTextInput((BufferedTextConnection) connection, builder.toString());
+					}
+				} catch (IOException e) {
+					connection.setActive(false);
+					for (ConnectionStateListener l : ((BufferedTextConnection) connection).getConnectionStateReciver()
+							.getConnectionStateListeners()) {
+						l.onConnectionCloses(connection);
+					}
+					try {
+						connection.getConnection().close();
+					} catch (IOException e1) {
+						e1.printStackTrace();
+					}
+				}
 			}
 		}
 	}

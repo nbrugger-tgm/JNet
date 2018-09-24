@@ -19,6 +19,7 @@ public class BufferedTextConnection extends NetConnection {
 	private final BufferedTextReciver binreciver;
 	private final ConnectionStateReciver connectionStateReciver;
 	private final BufferedWriter writer;
+	private TextEnder ender = new DefaultTextEnder();
 	public BufferedTextConnection(Socket connection,BufferedTextReciver server,ConnectionStateReciver reciver) throws IOException {
 		super(connection);
 		binreciver = server;
@@ -51,6 +52,20 @@ public class BufferedTextConnection extends NetConnection {
 	@Override
 	protected StreamListener getListener() {
 		return new BufferedTextStreamListener(this);
+	}
+
+	/**
+	 * @return the ender
+	 */
+	public TextEnder getEnder() {
+		return ender;
+	}
+
+	/**
+	 * @param ender the ender to set
+	 */
+	public void setEnder(TextEnder ender) {
+		this.ender = ender;
 	}
 
 }
