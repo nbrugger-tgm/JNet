@@ -13,7 +13,7 @@ import com.nbrugger.jnet.Server;
  * @author Nils Brugger
  * @version 2018-09-14
  */
-public class BufferedTextServer extends Server implements BufferedTextReciver {
+public class BufferedTextServer extends Server implements BufferedTextReciver   {
 
 	/**
 	 * Creates an Instance of BinaryServer.java

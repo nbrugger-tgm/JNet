@@ -24,7 +24,7 @@ public class BufferedTextStreamListener extends StreamListener {
 	@Override
 	public void run() {
 		BufferedReader dis;
-
+		BufferedTextConnection con = (BufferedTextConnection) connection;
 		while (isActive()) {
 			try {
 				Thread.sleep(200);
@@ -40,21 +40,17 @@ public class BufferedTextStreamListener extends StreamListener {
 				try {
 					StringBuilder builder = new StringBuilder();
 					String line;
-					while(((BufferedTextConnection)connection).getEnder().onClose() ? (line = dis.readLine()) != null : !((line = dis.readLine()).equals(((BufferedTextConnection)connection).getEnder().getMessageEnd())))
+					while(con.getEnder().onClose() ? (line = dis.readLine()) != null : !((line = dis.readLine()).equals(con.getEnder().getMessageEnd())))
 						builder.append(line);
 //					for (ConnectionStateListener l : ((BufferedTextConnection) connection).getConnectionStateReciver()
 //							.getConnectionStateListeners()) {
 //						l.onConnectionCloses(connection);
 //					}
 //					continue;
-
-					for (BufferedTextInputListener l : ((BufferedTextConnection) connection).getBinreciver()
-							.getIOListeners()) {
-						l.onTextInput((BufferedTextConnection) connection, builder.toString());
-					}
+					((BufferedTextConnection)connection).onTextInput(con,  builder.toString());
 				} catch (IOException e) {
 					connection.setActive(false);
-					for (ConnectionStateListener l : ((BufferedTextConnection) connection).getConnectionStateReciver()
+					for (ConnectionStateListener l : con.getConnectionStateReciver()
 							.getConnectionStateListeners()) {
 						l.onConnectionCloses(connection);
 					}
