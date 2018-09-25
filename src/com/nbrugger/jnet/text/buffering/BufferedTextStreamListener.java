@@ -48,8 +48,10 @@ public class BufferedTextStreamListener extends StreamListener {
 								else;
 							else if((line = dis.readLine()).equals(con.getEnder().getMessageEnd()))
 								break;
-							else
+							else {
 								builder.append(line);
+								builder.append(System.lineSeparator());
+							}
 					}catch(NullPointerException pointer){
 						for (ConnectionStateListener l : ((BufferedTextConnection) connection)
 								.getConnectionStateReciver().getConnectionStateListeners()) {
