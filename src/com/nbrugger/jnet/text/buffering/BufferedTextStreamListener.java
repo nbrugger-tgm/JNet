@@ -40,13 +40,23 @@ public class BufferedTextStreamListener extends StreamListener {
 				try {
 					StringBuilder builder = new StringBuilder();
 					String line;
-					while(con.getEnder().onClose() ? (line = dis.readLine()) != null : !((line = dis.readLine()).equals(con.getEnder().getMessageEnd())))
-						builder.append(line);
-//					for (ConnectionStateListener l : ((BufferedTextConnection) connection).getConnectionStateReciver()
-//							.getConnectionStateListeners()) {
-//						l.onConnectionCloses(connection);
-//					}
-//					continue;
+					try {
+						while(true)
+							if(con.getEnder().onClose())
+								if((line = dis.readLine()) != null)
+									break;
+								else;
+							else if((line = dis.readLine()).equals(con.getEnder().getMessageEnd()))
+								break;
+							else
+								builder.append(line);
+					}catch(NullPointerException pointer){
+						for (ConnectionStateListener l : ((BufferedTextConnection) connection)
+								.getConnectionStateReciver().getConnectionStateListeners()) {
+							l.onConnectionCloses(connection);
+						}
+						continue;
+					}
 					((BufferedTextConnection)connection).onTextInput(con,  builder.toString());
 				} catch (IOException e) {
 					connection.setActive(false);
