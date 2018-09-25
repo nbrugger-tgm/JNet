@@ -18,7 +18,7 @@ import com.nbrugger.jnet.text.buffering.BufferedTextReciver;
  */
 public class SimpleHTTPClient extends BufferedTextConnection{
 	public static void main(String[] args) throws IOException {
-		SimpleHTTPClient client = new SimpleHTTPClient("localhost");
+		SimpleHTTPClient client = new SimpleHTTPClient("google.com");
 		client.request("/");
 	}
 	
