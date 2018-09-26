@@ -11,19 +11,22 @@ import com.nbrugger.jnet.StreamListener;
 
 /**
  * This is the BinaryConnection Class
+ * 
  * @author Nils Brugger
  * @version 2018-09-22
  */
-public class BufferedTextConnection extends NetConnection {
+public class BufferedTextConnection extends NetConnection implements BufferedTextInputListener {
 
 	private final BufferedTextReciver binreciver;
 	private final ConnectionStateReciver connectionStateReciver;
 	private final BufferedWriter writer;
 	private TextEnder ender = new DefaultTextEnder();
-	public BufferedTextConnection(Socket connection,BufferedTextReciver server,ConnectionStateReciver reciver) throws IOException {
+
+	public BufferedTextConnection(Socket connection, BufferedTextReciver server, ConnectionStateReciver reciver)
+			throws IOException {
 		super(connection);
 		binreciver = server;
-		connectionStateReciver = reciver; 
+		connectionStateReciver = reciver;
 		writer = new BufferedWriter(new OutputStreamWriter(connection.getOutputStream()));
 	}
 
@@ -31,7 +34,7 @@ public class BufferedTextConnection extends NetConnection {
 		writer.write(data);
 		writer.flush();
 	}
-	
+
 	/**
 	 * @return the binreciver
 	 */
@@ -45,7 +48,7 @@ public class BufferedTextConnection extends NetConnection {
 	public ConnectionStateReciver getConnectionStateReciver() {
 		return connectionStateReciver;
 	}
-	
+
 	/**
 	 * @see com.nbrugger.jnet.NetConnection#getListener()
 	 */
@@ -66,6 +69,17 @@ public class BufferedTextConnection extends NetConnection {
 	 */
 	public void setEnder(TextEnder ender) {
 		this.ender = ender;
+	}
+
+	/**
+	 * @see com.nbrugger.jnet.text.buffering.BufferedTextInputListener#onTextInput(com.nbrugger.jnet.text.buffering.BufferedTextConnection,
+	 *      java.lang.String)
+	 */
+	@Override
+	public void onTextInput(BufferedTextConnection connection, String b) {
+		for (BufferedTextInputListener l : binreciver.getIOListeners()) {
+			l.onTextInput(connection, b);
+		}
 	}
 
 }
