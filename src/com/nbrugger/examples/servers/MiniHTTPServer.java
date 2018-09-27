@@ -77,12 +77,11 @@ public class MiniHTTPServer extends BufferedTextServer implements BufferedTextIn
 				if (f.exists())
 					if (f.isDirectory()) {
 						Directory file = new Directory(f);
-						connection.sendData("HTTP\1.0 200 ALLESOK\n\n");
 						StringWriter writer = new StringWriter();
 						PrintWriter out = new PrintWriter(writer);
 						printFolderHTML(file, out);
 						out.flush();
-						connection.sendData(writer.toString());
+						sendHTTPResponse(200, writer.toString(), connection);
 					} else {
 						NFile file = new NFile(f);
 						sendHTTPResponse(200, file.getText(), connection);
