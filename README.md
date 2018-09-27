@@ -25,8 +25,8 @@ This is an API to handle with the network servers and the whole internet.
 
 ### Description
 
-Text based means that the server and client communicate with Strings -> over text.
-Examples for this is HTTP or SMTP or any other protocol ending with TP (Text Protocol) 
+Text based means that the server and client communicate with Strings -> over text. Examples for this is HTTP or SMTP.
+Which means you can also build web or mail servers using this tool (Only as web interface)
 So if you have an Server the client should send strings as command.  
 For example:
 Client sends the text "login name='nils' pwd='das'" and the server respondes "loginstate='102'" where 102 means "user not found" for example   
@@ -45,6 +45,4 @@ We recommend to only use the components in the
 
 package.
 
-
-
-[mapi] : https://github.com/nbrugger-tgm/Niton-Media-Framework "Media API" 
+[mapi]: https://github.com/nbrugger-tgm/Niton-Media-Framework "Media API" 
