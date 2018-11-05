@@ -27,7 +27,7 @@ public class BufferedTextStreamListener extends StreamListener {
 		BufferedTextConnection con = (BufferedTextConnection) connection;
 		while (isActive()) {
 			try {
-				Thread.sleep(200);
+				Thread.sleep(20);
 			} catch (InterruptedException e) {
 			}
 			try {
