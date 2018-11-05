@@ -1,5 +1,6 @@
 package com.nbrugger.test;
 
+import java.io.BufferedOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -51,9 +52,12 @@ public class BinaryTest {
 		byte[] sdata = new byte[] {1,2,3,5,6,7,8,9,10};
 		dos.writeInt(sdata.length);
 		dos.write(sdata);
+		dos.flush();
 		sdata = new byte[9*10000];
+		Arrays.fill(sdata, (byte)1);
 		dos.writeInt(sdata.length);
-		dos.write(sdata);
+		new BufferedOutputStream(dos).write(sdata);
+		dos.flush();
 		s.close();
 		try {
 			Thread.sleep(20000);
