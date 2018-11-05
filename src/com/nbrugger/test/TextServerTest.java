@@ -1,18 +1,9 @@
 package com.nbrugger.test;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.net.Socket;
 
 import com.nbrugger.jnet.ConnectionStateListener;
 import com.nbrugger.jnet.NetConnection;
-import com.nbrugger.jnet.text.TextConnection;
-import com.nbrugger.jnet.text.TextInputListener;
-import com.nbrugger.jnet.text.TextServer;
 import com.nbrugger.jnet.text.buffering.BufferedTextConnection;
 import com.nbrugger.jnet.text.buffering.BufferedTextInputListener;
 import com.nbrugger.jnet.text.buffering.BufferedTextServer;
@@ -26,7 +17,7 @@ import com.nbrugger.jnet.text.buffering.BufferedTextServer;
 public class TextServerTest {
 
 	public static void main(String[] args) throws Exception {
-		BufferedTextServer server = new BufferedTextServer(80, 50);
+		BufferedTextServer server = new BufferedTextServer(88, 50);
 		server.addConnectionStateListener(new ConnectionStateListener() {
 			
 			@Override
