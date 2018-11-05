@@ -19,8 +19,11 @@ import com.niton.media.json.basic.JsonValue;
  * @version 2018-10-02
  */
 public class Server {
-	private static HashMap<String, String> db = new HashMap<>();
+	/**
+	 * Commands: {set/get} [Key] [Data] 
+	 */
 	public static void main(String[] args) throws IOException {
+		ServerModel m = new ServerModel();
 		JsonServer server = new JsonServer(900, 200);
 		server.addIOListener(new JsonInputListener() {
 			
@@ -30,21 +33,26 @@ public class Server {
 			}
 
 			@Override
-			public void onJsonInput(JsonConnection connection, JsonValue<?> json) {
-				System.out.println("Json in : "+json.getJson());
-				if(json.get("action").getValue().equals("get")) {
-					JsonObject o = new JsonObject();
-					o.add("data", Model.secretMessage);
-					try {
-						connection.send(o);
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-				}
+			public void onJsonInput(JsonConnection connection, JsonValue<?> val) {
+				System.out.println("Json in (we need command) : "+val.getJson());
 			}
 
 			@Override
 			public void onCommand(JsonConnection connection, Command cmd) {
+				System.out.println("Recive Command "+cmd);
+				if(cmd.getName().equals("set")) {
+					m.getDb().put(cmd.getArgs().get("key"), cmd.getArgs().get("data"));
+				}
+				if(cmd.getName().equals("get")) {
+					JsonObject obj = new JsonObject();
+					String data = m.getDb().get(cmd.getArgs().get("key"));
+					obj.add("data", data);
+					try {
+						connection.send(obj);
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
 			}
 		});
 		server.addConnectionStateListener(new ConnectionStateListener() {
