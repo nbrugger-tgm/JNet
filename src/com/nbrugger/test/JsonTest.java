@@ -11,6 +11,7 @@ import com.nbrugger.jnet.NetConnection;
 import com.nbrugger.jnet.text.buffering.BufferedTextConnection;
 import com.nbrugger.jnet.text.buffering.BufferedTextInputListener;
 import com.nbrugger.jnet.text.buffering.BufferedTextReciver;
+import com.nbrugger.jnet.text.json.Command;
 import com.nbrugger.jnet.text.json.JsonConnection;
 import com.nbrugger.jnet.text.json.JsonInputListener;
 import com.nbrugger.jnet.text.json.JsonServer;
@@ -56,6 +57,11 @@ public class JsonTest {
 			@Override
 			public void onJsonInput(JsonConnection connection, JsonValue<?> json) {
 				System.out.println("Json Object in : \n"+json.getJson());
+			}
+
+			@Override
+			public void onCommand(JsonConnection connection, Command cmd) {
+				System.out.println("Command In : "+cmd);
 			}
 		});
 		server.start();
