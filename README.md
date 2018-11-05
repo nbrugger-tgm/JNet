@@ -6,13 +6,19 @@ This is an API to handle with the network servers and the whole internet.
 
 ## Table of content
 
-
-1. Features
+1. Branching
+2. Features
 	
-*   Text Based
-*   Package Based
+    * Text Based
+    * Package Based
 
+## Branching
 
+* **Master** : Only completely Tested features. This branch has only stable versions so it is maybe a bit old but the advantage is that you can trust it as the features which are in are always working. All Test cases and upcomming ones are covered and (will) work
+* **Alpha** : The alpha branch is the Accurate Testing branch. The versions in here seem to be stable but still need accurate testing. You can use this as stable version but it has maybe a few hidden bugs and issues. All Test cases are covered and work. (semi-stable)
+* **Text Based** : This brach regular get updates and contains all new features of the text based servers. It also contains alpha Json Features. Mean the Json features which at least work in the test cases so its Semi-stable. It is very unstable may contains non working test cases
+* **Binary Based** : This brach regular get updates and contains all new binary based features. It is very unstable may contains non working test cases
+* **Json** : This branch regular get updates and contains all new features of the json based servers. It is very unstable may contains non working test cases
 ## Text Based
 
 ### Specs
