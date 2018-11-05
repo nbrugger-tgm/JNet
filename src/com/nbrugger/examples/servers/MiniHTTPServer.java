@@ -21,7 +21,6 @@ import com.niton.media.filesystem.NFile;
  * @version 2018-09-25
  */
 public class MiniHTTPServer extends BufferedTextServer implements BufferedTextInputListener {
-	private static final Scanner s = new Scanner(System.in);
 	private static final Directory folder = new Directory("D:");
 	private boolean indexing = false;
 
@@ -125,7 +124,7 @@ public class MiniHTTPServer extends BufferedTextServer implements BufferedTextIn
 	}
 
 	public void sendHTTPResponse(int status, String text, BufferedTextConnection connection) throws IOException {
-		connection.sendData("HTTP\1.0 " + status + " ALLESOK\n\n");
+		connection.sendData("HTTP\1.0 " + status + " OK\n\n");
 		connection.sendData(text);
 	}
 }

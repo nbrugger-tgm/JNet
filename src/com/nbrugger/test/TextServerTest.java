@@ -17,7 +17,7 @@ import com.nbrugger.jnet.text.buffering.BufferedTextServer;
 public class TextServerTest {
 
 	public static void main(String[] args) throws Exception {
-		BufferedTextServer server = new BufferedTextServer(80, 50);
+		BufferedTextServer server = new BufferedTextServer(88, 50);
 		server.addConnectionStateListener(new ConnectionStateListener() {
 			
 			@Override
