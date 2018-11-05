@@ -17,8 +17,8 @@ This is an API to handle with the network servers and the whole internet.
 
 ### Specs
 *   State                 : Currently done
-*   Latest Stable Version : 1.1.0
-*   Current Version       : 1.1.0
+*   Latest Stable Version : 1.2.0
+*   Current Version       : 1.2.0
 *   package               : com.nbrugger.jnet.text
 
 > This module uses my [Media API][mapi] as JSON Parser and Serializer and the stream System.
