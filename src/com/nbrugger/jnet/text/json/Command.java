@@ -1,6 +1,7 @@
 package com.nbrugger.jnet.text.json;
 
 import java.util.HashMap;
+import java.util.Map.Entry;
 
 import com.niton.media.json.JsonSerializer;
 
@@ -48,6 +49,18 @@ public class Command {
 	 */
 	public void setName(String name) {
 		this.name = name;
+	}
+	
+	/**
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		String cmd = name;
+		for (Entry<String, String> entry : args.entrySet()) {
+			cmd+=" "+entry.getKey()+"="+entry.getValue();
+		}
+		return cmd;
 	}
 
 }

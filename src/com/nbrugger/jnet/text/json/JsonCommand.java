@@ -41,6 +41,7 @@ public class JsonCommand extends JsonValue<Command> {
 		for(Entry<String, JsonValue<?>> entry : args.getValue().entrySet()) {
 			c.addArgument(entry.getKey(), entry.getValue().getValue().toString());
 		}
+		setValue(c);
 	}
 }
 

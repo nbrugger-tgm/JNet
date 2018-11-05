@@ -17,13 +17,15 @@ import sun.management.snmp.util.SnmpNamedListTableCache;
 
 /**
  * This is the JsonConnection Class
+ * 
  * @author Nils Brugger
  * @version 2018-09-25
  */
-public class JsonConnection extends BufferedTextConnection{
+public class JsonConnection extends BufferedTextConnection {
 
 	/**
 	 * Creates an Instance of JsonConnection.java
+	 * 
 	 * @author Nils Brugger
 	 * @version 2018-09-25
 	 * @param connection
@@ -35,36 +37,40 @@ public class JsonConnection extends BufferedTextConnection{
 			throws IOException {
 		super(connection, server, reciver);
 	}
-	
+
 	@Override
 	public void onTextInput(BufferedTextConnection connection, String b) {
 		try {
 			JsonValue<?> object = new JsonInputStream(new StringInputStream(b)).readNextJson();
-			if(object instanceof JsonCommand) {
+			if (object != null && object instanceof JsonObject && ((JsonObject) object).get("type") != null && ((JsonObject) object).get("type").getValue().equals(Command.class.getName())) {
+				JsonCommand cmd = new JsonCommand();
+				cmd.readNext(new StringInputStream(((JsonObject) object).get("value").getJson()));
 				for (BufferedTextInputListener listener : getBinreciver().getIOListeners()) {
-					if(listener instanceof JsonInputListener)
-						((JsonInputListener) listener).onCommand(this, (Command) object.getValue());
+					if (listener instanceof JsonInputListener) {
+						((JsonInputListener) listener).onCommand(this, cmd.getValue());
+					}
 				}
 			} else {
-				if(object == null)
+				if (object == null)
 					throw new Exception();
 				for (BufferedTextInputListener listener : getBinreciver().getIOListeners()) {
-					if(listener instanceof JsonInputListener)
+					if (listener instanceof JsonInputListener)
 						((JsonInputListener) listener).onJsonInput(this, object);
 				}
 			}
 		} catch (Exception e) {
-//			e.printStackTrace();
+			e.printStackTrace();
 			for (BufferedTextInputListener listener : getBinreciver().getIOListeners()) {
 				listener.onTextInput(connection, b);
 			}
 		}
 	}
-	
+
 	public void send(JsonValue<?> o) throws IOException {
 		sendData(o.getJson());
 		sendData("\n\n");
 	}
+
 	public void send(Object o) throws IOException, InstantiationException, IllegalAccessException {
 		JsonOutputStream jos = new JsonOutputStream(getConnection().getOutputStream());
 		jos.write(o);
@@ -72,4 +78,3 @@ public class JsonConnection extends BufferedTextConnection{
 		sendData("\n\n");
 	}
 }
-
