@@ -39,12 +39,19 @@ public class JsonConnection extends BufferedTextConnection{
 	@Override
 	public void onTextInput(BufferedTextConnection connection, String b) {
 		try {
-			JsonObject object = new JsonInputStream(new StringInputStream(b)).readNextJsonObject();
-			if(object.getAsArray().size() == 0)
-				throw new Exception();
-			for (BufferedTextInputListener listener : getBinreciver().getIOListeners()) {
-				if(listener instanceof JsonInputListener)
-					((JsonInputListener) listener).onJsonInput(this, object);
+			JsonValue<?> object = new JsonInputStream(new StringInputStream(b)).readNextJson();
+			if(object instanceof JsonCommand) {
+				for (BufferedTextInputListener listener : getBinreciver().getIOListeners()) {
+					if(listener instanceof JsonInputListener)
+						((JsonInputListener) listener).onCommand(this, (Command) object.getValue());
+				}
+			} else {
+				if(object == null)
+					throw new Exception();
+				for (BufferedTextInputListener listener : getBinreciver().getIOListeners()) {
+					if(listener instanceof JsonInputListener)
+						((JsonInputListener) listener).onJsonInput(this, object);
+				}
 			}
 		} catch (Exception e) {
 //			e.printStackTrace();
