@@ -6,6 +6,7 @@ import com.nbrugger.jnet.ConnectionListener;
 import com.nbrugger.jnet.NetConnection;
 import com.nbrugger.jnet.text.buffering.BufferedTextServer;
 import com.niton.media.json.basic.JsonObject;
+import com.niton.media.json.basic.JsonValue;
 
 /**
  * This is the JsonServer Class
@@ -18,7 +19,7 @@ public class JsonServer extends BufferedTextServer{
 		super(port, timeout);
 	}
 
-	public void brodcast(JsonObject object) throws IOException {
+	public void brodcast(JsonValue<?> object) throws IOException {
 		for (NetConnection connection : openConnections) {
 			((JsonConnection)connection).send(object);
 		}
