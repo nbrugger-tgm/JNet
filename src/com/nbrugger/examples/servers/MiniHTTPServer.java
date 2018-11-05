@@ -35,7 +35,7 @@ public class MiniHTTPServer extends BufferedTextServer implements BufferedTextIn
 	 * @throws IOException
 	 */
 	public MiniHTTPServer() throws IOException {
-		super(80, 20000);
+		super(88, 20000);
 		addIOListener(this);
 		start();
 	}
@@ -61,7 +61,7 @@ public class MiniHTTPServer extends BufferedTextServer implements BufferedTextIn
 				String[] pair = line.split(": ");
 				values.put(pair[0], pair[1]);
 			}
-			File f = new File(folder.getPathAsString() + URLDecoder.decode(head[1],"UTF-8"));
+			File f = new File(folder.getPathAsString() + URLDecoder.decode(head[1], "UTF-8"));
 			if (indexing) {
 				NFile file;
 				if (f.isDirectory())
@@ -69,45 +69,63 @@ public class MiniHTTPServer extends BufferedTextServer implements BufferedTextIn
 				else
 					file = new NFile(f);
 				if (file.exisits()) {
-					connection.sendData("HTTP\1.0 200 ALLESOK\n\n");
-					connection.sendData(file.getText());
+					sendHTTPResponse(200, file.getText(), connection);
 				} else {
-					connection.sendData("HTTP\1.0 404 ALLESOK\n\n");
+					sendHTTPResponse(404, "", connection);
 				}
 			} else {
 				if (f.exists())
 					if (f.isDirectory()) {
 						Directory file = new Directory(f);
-						connection.sendData("HTTP\1.0 200 ALLESOK\n\n");
 						StringWriter writer = new StringWriter();
 						PrintWriter out = new PrintWriter(writer);
-						if (file.getDeepnes() > 0)
-							out.println("<a href=\""
-									+ file.getParent().getPathAsString().replace(folder.getPathAsString(), "")
-									+ "\">..</a><br>");
-						out.write("<h1>Directorys</h1>");
-						for (Directory d : file.getSubFolder()) {
-							out.println("<a href=\"" + d.getPathAsString().replace(folder.getPathAsString(), "") + "\">"
-									+ d.getName() + "</a><br>");
-						}
-						out.write("<h1>Files</h1>");
-						for (NFile d : file.getSubFiles()) {
-							out.println("<a href=\"" + d.getPathAsString().replace(folder.getPathAsString(), "") + "\">"
-									+ d.getFile().getName() + "</a><br>");
-						}
+						printFolderHTML(file, out);
 						out.flush();
-						connection.sendData(writer.toString());
+						sendHTTPResponse(200, writer.toString(), connection);
 					} else {
 						NFile file = new NFile(f);
-						connection.sendData("HTTP\1.0 200 ALLESOK\n\n");
-						connection.sendData(file.getText());
+						sendHTTPResponse(200, file.getText(), connection);
 					}
 				else
-					connection.sendData("HTTP\1.0 404 Nosing faund\n\n");
+					sendHTTPResponse(404, "", connection);
 			}
 			connection.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		// try {
+//			sendHTTPResponse(200, "OK", connection);
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
+	}
+
+	/**
+	 * <b>Description :</b><br>
+	 * 
+	 * @author Nils Brugger
+	 * @version 2018-09-26
+	 * @param file
+	 * @param out
+	 */
+	private void printFolderHTML(Directory file, PrintWriter out) {
+		if (file.getDeepnes() > 0)
+			out.println("<a href=\"" + file.getParent().getPathAsString().replace(folder.getPathAsString(), "")
+					+ "\">..</a><br>");
+		out.write("<h1>Directorys</h1>");
+		for (Directory d : file.getSubFolder()) {
+			out.println("<a href=\"" + d.getPathAsString().replace(folder.getPathAsString(), "") + "\">" + d.getName()
+					+ "</a><br>");
+		}
+		out.write("<h1>Files</h1>");
+		for (NFile d : file.getSubFiles()) {
+			out.println("<a href=\"" + d.getPathAsString().replace(folder.getPathAsString(), "") + "\">"
+					+ d.getFile().getName() + "</a><br>");
+		}
+	}
+
+	public void sendHTTPResponse(int status, String text, BufferedTextConnection connection) throws IOException {
+		connection.sendData("HTTP\1.0 " + status + " ALLESOK\n\n");
+		connection.sendData(text);
 	}
 }
