@@ -31,7 +31,7 @@ public class BinaryStreamListener extends StreamListener {
 
 		while (isActive()) {
 			try {
-				Thread.sleep(200);
+				Thread.sleep(20);
 			} catch (InterruptedException e) {
 			}
 			try {
@@ -48,7 +48,10 @@ public class BinaryStreamListener extends StreamListener {
 						}
 					} else {
 						byte[] data = new byte[size];
-						dis.read(data);
+						int read = 0;
+						while(read < data.length) {
+							read += dis.read(data, read, data.length-read);
+						}
 						for (BinaryInputListener l : ((BinaryConnection)connection).getBinreciver().getIOListeners()) {
 							l.onByteInput(connection, data);
 						}
