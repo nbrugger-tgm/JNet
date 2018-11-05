@@ -8,6 +8,7 @@ import com.nbrugger.jnet.text.buffering.BufferedTextConnection;
 import com.nbrugger.jnet.text.buffering.BufferedTextInputListener;
 import com.nbrugger.jnet.text.buffering.BufferedTextReciver;
 import com.niton.media.json.basic.JsonObject;
+import com.niton.media.json.basic.JsonValue;
 import com.niton.media.json.io.JsonInputStream;
 import com.niton.media.json.io.JsonOutputStream;
 import com.niton.media.json.io.StringInputStream;
@@ -53,15 +54,15 @@ public class JsonConnection extends BufferedTextConnection{
 		}
 	}
 	
-	public void send(JsonObject o) throws IOException {
-		JsonOutputStream jos = new JsonOutputStream(getConnection().getOutputStream());
-		jos.write(o);
-		jos.flush();
+	public void send(JsonValue<?> o) throws IOException {
+		sendData(o.getJson());
+		sendData("\n\n");
 	}
 	public void send(Object o) throws IOException, InstantiationException, IllegalAccessException {
 		JsonOutputStream jos = new JsonOutputStream(getConnection().getOutputStream());
 		jos.write(o);
 		jos.flush();
+		sendData("\n\n");
 	}
 }
 
