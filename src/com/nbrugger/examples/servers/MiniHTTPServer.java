@@ -35,7 +35,7 @@ public class MiniHTTPServer extends BufferedTextServer implements BufferedTextIn
 	 * @throws IOException
 	 */
 	public MiniHTTPServer() throws IOException {
-		super(80, 20000);
+		super(88, 20000);
 		addIOListener(this);
 		start();
 	}
@@ -93,6 +93,11 @@ public class MiniHTTPServer extends BufferedTextServer implements BufferedTextIn
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+//		try {
+//			sendHTTPResponse(200, "OK", connection);
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
 	}
 
 	/**

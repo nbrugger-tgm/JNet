@@ -10,6 +10,7 @@ import com.nbrugger.jnet.ConnectionStateReciver;
 import com.nbrugger.jnet.text.buffering.BufferedTextConnection;
 import com.nbrugger.jnet.text.buffering.BufferedTextInputListener;
 import com.nbrugger.jnet.text.buffering.BufferedTextReciver;
+import com.nbrugger.jnet.text.buffering.ConnectinCloseEnder;
 
 /**
  * This is the SimpleHTTPClient Class
@@ -18,8 +19,8 @@ import com.nbrugger.jnet.text.buffering.BufferedTextReciver;
  */
 public class SimpleHTTPClient extends BufferedTextConnection{
 	public static void main(String[] args) throws IOException {
-		SimpleHTTPClient client = new SimpleHTTPClient("google.com");
-		client.request("/");
+		SimpleHTTPClient client = new SimpleHTTPClient("localhost");
+		client.request("/web/index.html");
 	}
 	
 	public SimpleHTTPClient(String inet) throws UnknownHostException, IOException {
@@ -43,6 +44,7 @@ public class SimpleHTTPClient extends BufferedTextConnection{
 				return new ArrayList<>();
 			}
 		});
+		this.setEnder(new ConnectinCloseEnder());
 	}
 	public void request(String path) throws IOException {
 		sendData("GET "+path+" HTTP/1.0\n\n");
