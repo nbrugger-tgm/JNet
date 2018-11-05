@@ -71,7 +71,7 @@ public class MiniHTTPServer extends BufferedTextServer implements BufferedTextIn
 				if (file.exisits()) {
 					sendHTTPResponse(200, file.getText(), connection);
 				} else {
-					sendHTTPResponse(200, "", connection);
+					sendHTTPResponse(404, "", connection);
 				}
 			} else {
 				if (f.exists())
@@ -93,7 +93,7 @@ public class MiniHTTPServer extends BufferedTextServer implements BufferedTextIn
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-//		try {
+		// try {
 //			sendHTTPResponse(200, "OK", connection);
 //		} catch (IOException e) {
 //			e.printStackTrace();
