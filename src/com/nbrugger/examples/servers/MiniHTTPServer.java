@@ -21,8 +21,8 @@ import com.niton.media.filesystem.NFile;
  * @version 2018-09-25
  */
 public class MiniHTTPServer extends BufferedTextServer implements BufferedTextInputListener {
-	private static final Directory folder = new Directory("D:");
-	private boolean indexing = false;
+	private static final Directory folder = new Directory("D:\\Desktop\\Workspaces\\Websides\\Time Planer\\client\\node");
+	private boolean indexing = true;
 
 	/**
 	 * Creates an Instance of MiniHTTPServer.java
